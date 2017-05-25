@@ -1,3 +1,16 @@
-img {
+.imagePlace {
+  width: 300px;
+  height: 300px;
+  inline-block;
+  outline: dotted 1px red;
+}
 
+img {
+  width: 300px;
+  height: 300px;
+}
+
+#picfield {
+width: 300px
+height: 300px
 }
