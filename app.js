@@ -20,30 +20,36 @@ function Product(name, path) {
   //this.display = Display;
 }
 
-var bag = new Product('bag', './images/bag.jpg');
-var banana = new Product('banana', './images/banana.jpg');
-var bathroom = new Product('bathroom', './images/bathroom.jpg');
-var boots = new Product('boots', './images/boots.jpg');
-var breakfast = new Product('breakfast', './images/breakfast.jpg');
-var bubblegum = new Product('bubblegum', './images/bubblegum.jpg');
-var chair = new Product('chair', './images/chair.jpg');
-var cthulhu = new Product('cthulhu', './images/cthulhu.jpg');
-var dogDuck = new Product('dog-duck', './images/dog-duck.jpg');
-var dragon = new Product('dragon', './images/dragon.jpg');
-var pen = new Product('pen', './images/pen.jpg');
-var petSweep = new Product('pet-sweep', './images/pet-sweep.jpg');
-var scissors = new Product('scissors', './images/scissors.jpg');
-var shark = new Product('shark', './images/shark.jpg');
-var sweep = new Product('sweep', './images/sweep.png');
-var tauntaun = new Product('tauntaun', './images/tauntaun.jpg');
-var unicorn = new Product('unicorn', './images/unicorn.jpg');
-var usb = new Product('usb', './images/usb.gif');
-var waterCan = new Product('water-can', './images/water-can.jpg');
-var wineGlass = new Product('wineGlass', './images/wine-glass.jpg');
+if (localStorage.imagesArray) {
+  imagesArray = JSON.parse(localStorage.imagesArray);
+  console.log('loaded imagesArray: ', imagesArray);
+  totalClicks = JSON.parse(localStorage.totalClicks);
+  console.log('loaded totalClicks: ', totalClicks);
+} else {
+  var bag = new Product('bag', './images/bag.jpg');
+  var banana = new Product('banana', './images/banana.jpg');
+  var bathroom = new Product('bathroom', './images/bathroom.jpg');
+  var boots = new Product('boots', './images/boots.jpg');
+  var breakfast = new Product('breakfast', './images/breakfast.jpg');
+  var bubblegum = new Product('bubblegum', './images/bubblegum.jpg');
+  var chair = new Product('chair', './images/chair.jpg');
+  var cthulhu = new Product('cthulhu', './images/cthulhu.jpg');
+  var dogDuck = new Product('dog-duck', './images/dog-duck.jpg');
+  var dragon = new Product('dragon', './images/dragon.jpg');
+  var pen = new Product('pen', './images/pen.jpg');
+  var petSweep = new Product('pet-sweep', './images/pet-sweep.jpg');
+  var scissors = new Product('scissors', './images/scissors.jpg');
+  var shark = new Product('shark', './images/shark.jpg');
+  var sweep = new Product('sweep', './images/sweep.png');
+  var tauntaun = new Product('tauntaun', './images/tauntaun.jpg');
+  var unicorn = new Product('unicorn', './images/unicorn.jpg');
+  var usb = new Product('usb', './images/usb.gif');
+  var waterCan = new Product('water-can', './images/water-can.jpg');
+  var wineGlass = new Product('wineGlass', './images/wine-glass.jpg');
 
-imagesArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass);
+  imagesArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, usb, waterCan, wineGlass);
   //console.log(imagesArray);
-
+}
 function randomImageIndex() {
   for (var i = 0; i < 20; i++) {
     var randomImage = Math.floor(Math.random() * imagesArray.length);
@@ -52,8 +58,9 @@ function randomImageIndex() {
       return imagesArray[randomImage];
     }
   }
-  //console.log(randomImage);
 }
+  //console.log(randomImage);
+
 // if (usedImage.includes(imagesArray[randomImage])) {}
 //console.log(randomizeImage());
 //randomizeImage();
@@ -84,12 +91,18 @@ function createListener() {
       usedImage[i].clicks += 1;
       break;    // break?
     }
-    stop();
   }
   totalClicks += 1;
+  save();
+  stop();
   render();
   console.log(totalClicks);
 }
+function save() {
+  localStorage.totalClicks = JSON.stringify(totalClicks);
+  localStorage.imagesArray = JSON.stringify(imagesArray);
+}
+
 function attachListener() {
   var imageTags = document.getElementsByClassName('imagePlace');
 
@@ -116,7 +129,7 @@ function results() {
 }
 
 function stop() {
-  if (totalClicks === 25) {
+  if (totalClicks >= 25) {
     results();
     var imageTags = document.getElementsByClassName('imagePlace');
 
@@ -124,6 +137,9 @@ function stop() {
     imageTags[1].removeEventListener('click', createListener);
     imageTags[2].removeEventListener('click', createListener);
   }
+  if (totalClicks > 25) {
+  }
+  totalClicks = 0;
 }
 
 function makeChart() {
@@ -151,7 +167,3 @@ function makeChart() {
   }
   );
 }
-// }
-// function tallyClicks() {
-//   results.style.visibility
-// }
