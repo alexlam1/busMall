@@ -138,8 +138,8 @@ function stop() {
     imageTags[2].removeEventListener('click', createListener);
   }
   if (totalClicks > 25) {
+    totalClicks = 0;
   }
-  totalClicks = 0;
 }
 
 function makeChart() {
