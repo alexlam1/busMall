@@ -2,7 +2,6 @@
 
 var imagesArray = [];
 var clicksArray = [];
-var counter = 0;
 var usedImage = [];
 var totalClicks = 0;
 
@@ -49,7 +48,7 @@ function randomImageIndex() {
   for (var i = 0; i < 20; i++) {
     var randomImage = Math.floor(Math.random() * imagesArray.length);
     if (usedImage.includes(imagesArray[randomImage]) === false) {
-      usedImage.push(imagesArray[randomImage]);
+      usedImage.push(imagesArray[randomImage]);  // <-- This & return
       return imagesArray[randomImage];
     }
   }
@@ -58,7 +57,7 @@ function randomImageIndex() {
 // if (usedImage.includes(imagesArray[randomImage])) {}
 //console.log(randomizeImage());
 //randomizeImage();
-
+// question render methods ************
 function render() {
   var imageTags = document.getElementsByClassName('imagePlace');
   var newUsed = [];
@@ -83,15 +82,14 @@ function createListener() {
   for (var i = 0; i < usedImage.length; i++) {
     if (this.getAttribute('src') === usedImage[i].path) {
       usedImage[i].clicks += 1;
-      break;
+      break;    // break?
     }
+    stop();
   }
-
   totalClicks += 1;
   render();
   console.log(totalClicks);
 }
-
 function attachListener() {
   var imageTags = document.getElementsByClassName('imagePlace');
 
@@ -106,20 +104,53 @@ function imageDisplay() {
 }
 imageDisplay();
 
-// function clickCount(clickTracker) {
-//   var clicksArray;
-//   console.log(clickArray);
-//   if(clicksArray == true) {
-//     clickedElement = event.srcElement;
-//   } else {
-//     clickedElement = e.target;
-//     }
-//     arrayWithElements.push(clicksArray)
-// }
-// function clickHandler() {
+function results() {
+  makeChart();
+  var list = document.getElementById('results');
+  var resultsArray = [];
+  for (var i = 0; i < 20; i++) {
+    resultsArray.push('<li>Total number of clicks for ' + imagesArray[i].name + ': ' + imagesArray[i].clicks + '</li>');
 
-//
+  }
+  list.innerHTML = resultsArray.join(',');
+}
 
+function stop() {
+  if (totalClicks === 25) {
+    results();
+    var imageTags = document.getElementsByClassName('imagePlace');
+
+    imageTags[0].removeEventListener('click', createListener);
+    imageTags[1].removeEventListener('click', createListener);
+    imageTags[2].removeEventListener('click', createListener);
+  }
+}
+
+function makeChart() {
+  var nameArray=[];
+  var canvas = document.getElementById('chart');
+  var ctx = canvas.getContext('2d');
+  for (var i = 0; i < imagesArray.length; i++) {
+    nameArray.push(imagesArray[i].name);
+    clicksArray.push(imagesArray[i].clicks);
+  }
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: nameArray,
+      datasets: [{
+        label: 'Click',
+        data: clicksArray,
+        backgroundColor: 'blue',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: false
+    }
+  }
+  );
+}
 // }
 // function tallyClicks() {
 //   results.style.visibility
